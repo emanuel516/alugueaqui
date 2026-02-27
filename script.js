@@ -1,18 +1,20 @@
-// Substitua pelas suas chaves do Supabase
+// Supabase
 const supabaseUrl = "https://wiesqachdwrdvuqmbudh.supabase.co";
 const supabaseKey = "sb_publishable_PVRWMM9b6IGK8EMPSLmVJQ_EOZG5DZb";
 const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-const SENHA_ADMIN = "326190";
 
 const container = document.getElementById("imoveis-container");
 const form = document.getElementById("form-imovel");
 const btnAdd = document.getElementById("add-imovel-btn");
 
+const SENHA_ADMIN = "326190";
+
+// Mostrar formulário somente se senha correta
 btnAdd.addEventListener("click", () => {
   form.style.display = "block";
 });
 
+// Envio do formulário
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -44,6 +46,7 @@ form.addEventListener("submit", async (e) => {
   carregarImoveis();
 });
 
+// Carregar imóveis
 async function carregarImoveis() {
   container.innerHTML = "Carregando imóveis...";
 
@@ -64,17 +67,15 @@ async function carregarImoveis() {
   }
 
   container.innerHTML = "";
-  data.forEach(imovel => {
+  data.forEach(imovel=>{
     const div = document.createElement("div");
     div.classList.add("imovel");
     div.innerHTML = `
       <img src="${imovel.imagem}" alt="${imovel.titulo}" />
-      <div class="imovel-content">
-        <h3>${imovel.titulo}</h3>
-        <p>${imovel.descricao}</p>
-        <p><strong>Preço:</strong> ${imovel.preco}</p>
-        <a href="https://wa.me/${imovel.whatsapp}" target="_blank">📱 Contato WhatsApp</a>
-      </div>
+      <h3>${imovel.titulo}</h3>
+      <p>${imovel.descricao}</p>
+      <p><strong>Preço:</strong> ${imovel.preco}</p>
+      <a href="https://wa.me/${imovel.whatsapp}" target="_blank">📱 Contato WhatsApp</a>
     `;
     container.appendChild(div);
   });
