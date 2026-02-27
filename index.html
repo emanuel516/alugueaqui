@@ -6,7 +6,6 @@
   <title>Alugue Aqui</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    /* Mantém o visual bonito original */
     body { font-family: Arial, sans-serif; background: #f5f5f5; margin:0; padding:0; }
     header { background: #0070f3; color: white; padding: 20px; text-align:center; }
     header img { max-width:150px; display:block; margin:0 auto 10px; }
@@ -19,11 +18,9 @@
     .imovel a { display:inline-block; margin-top:10px; background:#25d366; color:white; padding:10px 15px; border-radius:5px; text-decoration:none; font-weight:bold; }
     .imovel a:hover { background:#1ebe57; }
 
-    /* Botão Adicionar Imóvel */
+    /* Adicionar Imóvel */
     #add-imovel-btn { display:block; margin:20px auto; padding:10px 20px; background:#ff6600; color:white; border:none; border-radius:5px; cursor:pointer; font-weight:bold; }
     #add-imovel-btn:hover { background:#e65c00; }
-
-    /* Formulário de Adicionar Imóvel */
     #form-imovel { display:none; max-width:400px; margin:20px auto; background:white; padding:15px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
     #form-imovel input, #form-imovel textarea { width:100%; margin-bottom:10px; padding:8px; border-radius:5px; border:1px solid #ccc; }
     #form-imovel button { background:#0070f3; color:white; border:none; padding:10px 15px; border-radius:5px; cursor:pointer; font-weight:bold; }
@@ -52,13 +49,13 @@
   </form>
 
   <section id="imoveis-container">
-    <!-- Imóveis aparecerão aqui -->
+    <!-- Imóveis aparecem aqui via script -->
   </section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
-  // Supabase configurado
+  // --- Conexão direta com Supabase ---
   const supabaseUrl = "https://wiesqachdwrdvuqmbudh.supabase.co";
   const supabaseKey = "sb_publishable_PVRWMM9b6IGK8EMPSLmVJQ_EOZG5DZb";
   const supabase = supabase.createClient(supabaseUrl, supabaseKey);
@@ -67,18 +64,19 @@
   const form = document.getElementById("form-imovel");
   const btnAdd = document.getElementById("add-imovel-btn");
 
-  const SENHA_ADMIN = "326190"; // senha só sua
+  const SENHA_ADMIN = "326190"; // sua senha pessoal
 
-  // Mostrar formulário somente ao clicar
+  // Mostrar formulário apenas ao clicar no botão
   btnAdd.addEventListener("click", () => {
     form.style.display = "block";
   });
 
-  // Envio do imóvel
+  // Envio do formulário
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
+
     const senha = document.getElementById("senha").value;
-    if(senha !== SENHA_ADMIN){
+    if (senha !== SENHA_ADMIN) {
       alert("Senha incorreta!");
       return;
     }
@@ -93,7 +91,7 @@
       .from("imoveis")
       .insert([{ titulo, preco, descricao, imagem, whatsapp }]);
 
-    if(error){
+    if (error) {
       alert("Erro ao adicionar imóvel");
       console.error(error);
       return;
@@ -105,27 +103,28 @@
     carregarImoveis();
   });
 
-  // Carregar imóveis
+  // Carregar imóveis do Supabase
   async function carregarImoveis() {
     container.innerHTML = "Carregando imóveis...";
+
     const { data, error } = await supabase
       .from("imoveis")
       .select("*")
       .order("created_at", { ascending: false });
 
-    if(error){
+    if (error) {
       container.innerHTML = "Erro ao carregar imóveis";
       console.error(error);
       return;
     }
 
-    if(!data || data.length === 0){
+    if (!data || data.length === 0) {
       container.innerHTML = "Nenhum imóvel cadastrado ainda";
       return;
     }
 
     container.innerHTML = "";
-    data.forEach(imovel => {
+    data.forEach((imovel) => {
       const div = document.createElement("div");
       div.classList.add("imovel");
       div.innerHTML = `
