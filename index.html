@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alugue Aqui Imobiliária</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>🏢 Alugue Aqui</h1>
+  <p>Encontre o imóvel ideal em Vila Velha e Região</p>
+</header>
+
+<section class="filtros">
+  <input type="text" id="busca" placeholder="Buscar pelo nome...">
+  <input type="text" id="filtroBairro" placeholder="Filtrar por bairro">
+  <input type="number" id="valorMin" placeholder="Valor mínimo">
+  <input type="number" id="valorMax" placeholder="Valor máximo">
+  <select id="ordenar">
+    <option value="">Ordenar</option>
+    <option value="menor">Menor preço</option>
+    <option value="maior">Maior preço</option>
+  </select>
+  <button onclick="aplicarFiltros()">Filtrar</button>
+</section>
+
+<section class="admin">
+  <button onclick="mostrarFormulario()">+ Adicionar Imóvel</button>
+</section>
+
+<section id="formulario" class="formulario">
+  <input type="text" id="titulo" placeholder="Título do imóvel">
+  <input type="text" id="bairro" placeholder="Bairro">
+  <input type="number" id="preco" placeholder="Preço">
+  <input type="file" id="imagem">
+  <textarea id="descricao" placeholder="Descrição"></textarea>
+  <button onclick="adicionarImovel()">Salvar</button>
+</section>
+
+<h2 class="titulo-lista">Imóveis Disponíveis</h2>
+<section id="lista-imoveis" class="lista"></section>
+
+<a href="https://wa.me/5527997469111" class="whatsapp-fixo" target="_blank">
+  💬
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
