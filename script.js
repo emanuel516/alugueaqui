@@ -1,105 +1,83 @@
-let imoveis = JSON.parse(localStorage.getItem("imoveis")) || [];
+// Substitua pelas suas chaves do Supabase
+const supabaseUrl = "https://wiesqachdwrdvuqmbudh.supabase.co";
+const supabaseKey = "sb_publishable_PVRWMM9b6IGK8EMPSLmVJQ_EOZG5DZb";
+const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
-function salvarLocal() {
-  localStorage.setItem("imoveis", JSON.stringify(imoveis));
-}
+const SENHA_ADMIN = "326190";
 
-function mostrarFormulario() {
-  const form = document.getElementById("formulario");
-  form.style.display = form.style.display === "flex" ? "none" : "flex";
-}
+const container = document.getElementById("imoveis-container");
+const form = document.getElementById("form-imovel");
+const btnAdd = document.getElementById("add-imovel-btn");
 
-function adicionarImovel() {
-  const titulo = document.getElementById("titulo").value;
-  const bairro = document.getElementById("bairro").value;
-  const preco = document.getElementById("preco").value;
-  const descricao = document.getElementById("descricao").value;
-  const imagemInput = document.getElementById("imagem");
+btnAdd.addEventListener("click", () => {
+  form.style.display = "block";
+});
 
-  if (!titulo || !bairro || !preco) {
-    alert("Preencha os campos obrigatórios!");
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const senha = document.getElementById("senha").value;
+  if(senha !== SENHA_ADMIN){
+    alert("Senha incorreta!");
     return;
   }
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const novoImovel = {
-      id: Date.now(),
-      titulo,
-      bairro,
-      preco: parseFloat(preco),
-      descricao,
-      imagem: e.target.result
-    };
+  const titulo = document.getElementById("titulo").value;
+  const preco = document.getElementById("preco").value;
+  const descricao = document.getElementById("descricao").value;
+  const imagem = document.getElementById("imagem").value;
+  const whatsapp = document.getElementById("whatsapp").value;
 
-    imoveis.push(novoImovel);
-    salvarLocal();
-    listarImoveis();
-    document.getElementById("formulario").reset();
-  };
+  const { data, error } = await supabase
+    .from("imoveis")
+    .insert([{ titulo, preco, descricao, imagem, whatsapp }]);
 
-  if (imagemInput.files[0]) {
-    reader.readAsDataURL(imagemInput.files[0]);
+  if(error){
+    alert("Erro ao adicionar imóvel");
+    console.error(error);
+    return;
   }
-}
 
-function listarImoveis(lista = imoveis) {
-  const container = document.getElementById("lista-imoveis");
+  alert("Imóvel adicionado com sucesso!");
+  form.reset();
+  form.style.display = "none";
+  carregarImoveis();
+});
+
+async function carregarImoveis() {
+  container.innerHTML = "Carregando imóveis...";
+
+  const { data, error } = await supabase
+    .from("imoveis")
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if(error){
+    container.innerHTML = "Erro ao carregar imóveis";
+    console.error(error);
+    return;
+  }
+
+  if(!data || data.length===0){
+    container.innerHTML = "Nenhum imóvel cadastrado ainda";
+    return;
+  }
+
   container.innerHTML = "";
-
-  lista.forEach(imovel => {
-    const mensagem = `Olá, vi o imóvel ${imovel.titulo} no bairro ${imovel.bairro} no site Alugue Aqui e quero mais informações.`;
-    const linkWhats = `https://wa.me/5527997469111?text=${encodeURIComponent(mensagem)}`;
-
-    container.innerHTML += `
-      <div class="card">
-        <img src="${imovel.imagem}">
-        <div class="card-content">
-          <h3>${imovel.titulo}</h3>
-          <p><strong>Bairro:</strong> ${imovel.bairro}</p>
-          <p class="preco">R$ ${imovel.preco.toLocaleString('pt-BR')} / mês</p>
-          <p>${imovel.descricao}</p>
-          <button class="whatsapp" onclick="window.open('${linkWhats}')">
-            Falar no WhatsApp
-          </button>
-          <button class="excluir" onclick="excluirImovel(${imovel.id})">
-            Excluir
-          </button>
-        </div>
+  data.forEach(imovel => {
+    const div = document.createElement("div");
+    div.classList.add("imovel");
+    div.innerHTML = `
+      <img src="${imovel.imagem}" alt="${imovel.titulo}" />
+      <div class="imovel-content">
+        <h3>${imovel.titulo}</h3>
+        <p>${imovel.descricao}</p>
+        <p><strong>Preço:</strong> ${imovel.preco}</p>
+        <a href="https://wa.me/${imovel.whatsapp}" target="_blank">📱 Contato WhatsApp</a>
       </div>
     `;
+    container.appendChild(div);
   });
 }
 
-function excluirImovel(id) {
-  if (confirm("Tem certeza que deseja excluir?")) {
-    imoveis = imoveis.filter(i => i.id !== id);
-    salvarLocal();
-    listarImoveis();
-  }
-}
-
-function aplicarFiltros() {
-  const busca = document.getElementById("busca").value.toLowerCase();
-  const bairro = document.getElementById("filtroBairro").value.toLowerCase();
-  const min = document.getElementById("valorMin").value;
-  const max = document.getElementById("valorMax").value;
-  const ordenar = document.getElementById("ordenar").value;
-
-  let filtrados = imoveis.filter(i =>
-    i.titulo.toLowerCase().includes(busca) &&
-    i.bairro.toLowerCase().includes(bairro) &&
-    (!min || i.preco >= min) &&
-    (!max || i.preco <= max)
-  );
-
-  if (ordenar === "menor") {
-    filtrados.sort((a,b) => a.preco - b.preco);
-  } else if (ordenar === "maior") {
-    filtrados.sort((a,b) => b.preco - a.preco);
-  }
-
-  listarImoveis(filtrados);
-}
-
-listarImoveis();
+window.addEventListener("DOMContentLoaded", carregarImoveis);
