@@ -1,41 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Alugue Aqui</title>
-<style>
-/* Reset simples */
-* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-body { background:#f5f5f5; color:#333; }
-header { background:#0070f3; color:white; padding:20px; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center; }
-header img { width:150px; margin-bottom:10px; }
-header h1 { font-size:2rem; margin-bottom:5px; }
-header p { font-size:1rem; }
-
-/* Botão adicionar imóvel */
-#add-imovel-btn { display:block; margin:20px auto; padding:12px 25px; background:#ff6600; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:1rem; transition:0.2s; }
-#add-imovel-btn:hover { background:#e65c00; }
-
-/* Formulário */
-#form-imovel { display:none; max-width:450px; margin:20px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-#form-imovel input, #form-imovel textarea { width:100%; margin-bottom:12px; padding:10px; border-radius:5px; border:1px solid #ccc; font-size:1rem; }
-#form-imovel button { background:#0070f3; color:white; border:none; padding:12px 20px; border-radius:5px; cursor:pointer; font-weight:bold; transition:0.2s; font-size:1rem; }
-#form-imovel button:hover { background:#005bb5; }
-
-/* Grid imóveis */
-#imoveis-container { display:grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap:20px; padding:20px; max-width:1200px; margin:0 auto; }
-.imovel { background:white; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden; transition:0.2s; }
-.imovel:hover { transform: translateY(-3px); }
-.imovel img { width:100%; height:200px; object-fit:cover; }
-.imovel-content { padding:15px; }
-.imovel-content h3 { margin-bottom:8px; font-size:1.2rem; color:#0070f3; }
-.imovel-content p { margin-bottom:6px; font-size:0.95rem; }
-.imovel-content a { display:inline-block; margin-top:8px; background:#25d366; color:white; padding:8px 12px; border-radius:5px; text-decoration:none; font-weight:bold; transition:0.2s; }
-.imovel-content a:hover { background:#1ebe57; }
-
-@media (max-width:500px){ header h1{font-size:1.5rem;} header p{font-size:0.9rem;} }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alugue Aqui</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -64,91 +33,6 @@ header p { font-size:1rem; }
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-<script>
-// Substitua pelas suas chaves do Vercel (publicamente seguro para browser)
-const supabaseUrl = "https://wiesqachdwrdvuqmbudh.supabase.co";
-const supabaseKey = "sb_publishable_PVRWMM9b6IGK8EMPSLmVJQ_EOZG5DZb";
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
-
-const SENHA_ADMIN = "326190";
-
-const container = document.getElementById("imoveis-container");
-const form = document.getElementById("form-imovel");
-const btnAdd = document.getElementById("add-imovel-btn");
-
-btnAdd.addEventListener("click", () => {
-  form.style.display = "block";
-});
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  const senha = document.getElementById("senha").value;
-  if(senha !== SENHA_ADMIN){
-    alert("Senha incorreta!");
-    return;
-  }
-
-  const titulo = document.getElementById("titulo").value;
-  const preco = document.getElementById("preco").value;
-  const descricao = document.getElementById("descricao").value;
-  const imagem = document.getElementById("imagem").value;
-  const whatsapp = document.getElementById("whatsapp").value;
-
-  const { data, error } = await supabase
-    .from("imoveis")
-    .insert([{ titulo, preco, descricao, imagem, whatsapp }]);
-
-  if(error){
-    alert("Erro ao adicionar imóvel");
-    console.error(error);
-    return;
-  }
-
-  alert("Imóvel adicionado com sucesso!");
-  form.reset();
-  form.style.display = "none";
-  carregarImoveis();
-});
-
-async function carregarImoveis() {
-  container.innerHTML = "Carregando imóveis...";
-
-  const { data, error } = await supabase
-    .from("imoveis")
-    .select("*")
-    .order("created_at", { ascending: false });
-
-  if(error){
-    container.innerHTML = "Erro ao carregar imóveis";
-    console.error(error);
-    return;
-  }
-
-  if(!data || data.length===0){
-    container.innerHTML = "Nenhum imóvel cadastrado ainda";
-    return;
-  }
-
-  container.innerHTML = "";
-  data.forEach(imovel => {
-    const div = document.createElement("div");
-    div.classList.add("imovel");
-    div.innerHTML = `
-      <img src="${imovel.imagem}" alt="${imovel.titulo}" />
-      <div class="imovel-content">
-        <h3>${imovel.titulo}</h3>
-        <p>${imovel.descricao}</p>
-        <p><strong>Preço:</strong> ${imovel.preco}</p>
-        <a href="https://wa.me/${imovel.whatsapp}" target="_blank">📱 Contato WhatsApp</a>
-      </div>
-    `;
-    container.appendChild(div);
-  });
-}
-
-window.addEventListener("DOMContentLoaded", carregarImoveis);
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
