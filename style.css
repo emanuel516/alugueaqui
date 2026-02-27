@@ -1,33 +1,120 @@
-/* Reset simples */
-* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
-body { background:#f5f5f5; color:#333; }
-header { background:#0070f3; color:white; padding:20px; display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center; }
-header img { width:150px; margin-bottom:10px; }
-header h1 { font-size:2rem; margin-bottom:5px; }
-header p { font-size:1rem; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+  margin:0;
+  padding:0;
+}
 
-/* Botão adicionar imóvel */
-#add-imovel-btn { display:block; margin:20px auto; padding:12px 25px; background:#ff6600; color:white; border:none; border-radius:6px; cursor:pointer; font-weight:bold; font-size:1rem; transition:0.2s; }
-#add-imovel-btn:hover { background:#e65c00; }
+header {
+  background: #0070f3;
+  color: white;
+  padding: 20px;
+  text-align:center;
+}
 
-/* Formulário */
-#form-imovel { display:none; max-width:450px; margin:20px auto; background:white; padding:20px; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1); }
-#form-imovel input, #form-imovel textarea { width:100%; margin-bottom:12px; padding:10px; border-radius:5px; border:1px solid #ccc; font-size:1rem; }
-#form-imovel button { background:#0070f3; color:white; border:none; padding:12px 20px; border-radius:5px; cursor:pointer; font-weight:bold; transition:0.2s; font-size:1rem; }
-#form-imovel button:hover { background:#005bb5; }
+header img {
+  max-width:150px;
+  display:block;
+  margin:0 auto 10px;
+}
 
-/* Grid imóveis */
-#imoveis-container { display:grid; grid-template-columns: repeat(auto-fill,minmax(280px,1fr)); gap:20px; padding:20px; max-width:1200px; margin:0 auto; }
-.imovel { background:white; border-radius:10px; box-shadow:0 4px 12px rgba(0,0,0,0.1); overflow:hidden; transition:0.2s; }
-.imovel:hover { transform: translateY(-3px); }
-.imovel img { width:100%; height:200px; object-fit:cover; }
-.imovel-content { padding:15px; }
-.imovel-content h3 { margin-bottom:8px; font-size:1.2rem; color:#0070f3; }
-.imovel-content p { margin-bottom:6px; font-size:0.95rem; }
-.imovel-content a { display:inline-block; margin-top:8px; background:#25d366; color:white; padding:8px 12px; border-radius:5px; text-decoration:none; font-weight:bold; transition:0.2s; }
-.imovel-content a:hover { background:#1ebe57; }
+h1 {
+  margin:0;
+}
 
-@media (max-width:500px){
-  header h1{font-size:1.5rem;}
-  header p{font-size:0.9rem;}
+#imoveis-container {
+  display:grid;
+  grid-template-columns: repeat(auto-fill,minmax(250px,1fr));
+  gap:20px;
+  padding:20px;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.imovel {
+  background:white;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  text-align:center;
+}
+
+.imovel img {
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:8px;
+}
+
+.imovel h3 {
+  margin:10px 0 5px;
+}
+
+.imovel p {
+  margin:5px 0;
+}
+
+.imovel a {
+  display:inline-block;
+  margin-top:10px;
+  background:#25d366;
+  color:white;
+  padding:10px 15px;
+  border-radius:5px;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.imovel a:hover {
+  background:#1ebe57;
+}
+
+/* Adicionar Imóvel */
+#add-imovel-btn {
+  display:block;
+  margin:20px auto;
+  padding:10px 20px;
+  background:#ff6600;
+  color:white;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+#add-imovel-btn:hover {
+  background:#e65c00;
+}
+
+#form-imovel {
+  display:none;
+  max-width:400px;
+  margin:20px auto;
+  background:white;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.1);
+}
+
+#form-imovel input,
+#form-imovel textarea {
+  width:100%;
+  margin-bottom:10px;
+  padding:8px;
+  border-radius:5px;
+  border:1px solid #ccc;
+}
+
+#form-imovel button {
+  background:#0070f3;
+  color:white;
+  border:none;
+  padding:10px 15px;
+  border-radius:5px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+#form-imovel button:hover {
+  background:#005bb5;
 }
