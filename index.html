@@ -55,9 +55,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 <script>
-  // Supabase (HTML puro precisa colocar direto)
+  // Supabase funcionando para HTML puro
   const supabaseUrl = "https://wiesqachdwrdvuqmbudh.supabase.co";
-  const supabaseKey = "sb_publishable_PVRWMM9b6IGK8EMPSLmVJQ_EOZG5DZb"; // sua publishable key
+  const supabaseKey = "sb_publishable_PVRWMM9b6IGK8EMPSLmVJQ_EOZG5DZb";
   const supabase = supabase.createClient(supabaseUrl, supabaseKey);
 
   const container = document.getElementById("imoveis-container");
@@ -66,7 +66,7 @@
 
   const SENHA_ADMIN = "326190"; // sua senha pessoal
 
-  // Mostrar formulário somente se senha correta
+  // Mostrar formulário ao clicar no botão
   btnAdd.addEventListener("click", () => {
     form.style.display = "block";
   });
